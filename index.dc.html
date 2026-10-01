@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#ecebe7;color:#1a1a1a;font-family:"Noto Sans TC","PingFang TC",sans-serif;}
+a{color:#b5121b;}a:hover{color:#7d0c12;}
+*{box-sizing:border-box;}
+</style>
+</helmet>
+<div style="display:grid;grid-template-rows:auto minmax(0,1fr);height:100vh;">
+  <header style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;padding:14px 24px;background:#111;color:#fff;">
+    <div style="display:flex;align-items:baseline;gap:10px;">
+      <div style="font-weight:700;font-size:17px;letter-spacing:.02em;">哈佛商業評論 全球繁體中文版</div>
+      <div style="font-size:13px;color:#bdbdbd;">廣告版位展示</div>
+    </div>
+    <nav style="display:flex;flex-wrap:wrap;gap:4px;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="6">
+        <button onClick="{{ t.onClick }}" style="font:inherit;font-size:13px;padding:7px 12px;border:0;border-radius:4px;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }};">{{ t.label }}</button>
+      </sc-for>
+    </nav>
+    <div style="flex:1;"></div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="display:flex;background:#2a2a2a;border-radius:5px;padding:3px;">
+        <sc-for list="{{ devices }}" as="d" hint-placeholder-count="2">
+          <button onClick="{{ d.onClick }}" style="font:inherit;font-size:13px;padding:5px 12px;border:0;border-radius:3px;cursor:pointer;background:{{ d.bg }};color:{{ d.fg }};">{{ d.label }}</button>
+        </sc-for>
+      </div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" checked="{{ showAds }}" onChange="{{ toggleAds }}">顯示廣告</label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" checked="{{ showLabels }}" onChange="{{ toggleLabels }}">版位標籤</label>
+    </div>
+  </header>
+
+  <sc-if value="{{ isSpec }}" hint-placeholder-val="{{ false }}">
+    <main style="overflow:auto;padding:32px 24px 64px;">
+      <div style="max-width:1180px;margin:0 auto;">
+        <h1 style="margin:0 0 6px;font-size:26px;">版位規格總表</h1>
+        <p style="margin:0 0 24px;font-size:14px;color:#555;">快照日期 2026-09-30。桌機版 1024px 以上顯示，手機版以下顯示。粗體為快照當下投放尺寸。</p>
+        <div style="background:#fff;border:1px solid #d9d7d0;overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead>
+              <tr style="background:#f6f5f1;text-align:left;">
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;font-weight:500;">頁面</th>
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;font-weight:500;">裝置</th>
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;font-weight:500;">版位</th>
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;font-weight:500;">可用尺寸</th>
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;font-weight:500;">GAM Ad Unit</th>
+                <th style="padding:12px 16px;border-bottom:1px solid #d9d7d0;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ specRows }}" as="r" hint-placeholder-count="10">
+                <tr>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;">{{ r.page }}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;">{{ r.device }}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;"><div style="font-weight:500;">{{ r.name }}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#777;">{{ r.slot }}</div></td>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;">
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                      <sc-for list="{{ r.sizes }}" as="s" hint-placeholder-count="3">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:2px 6px;border:1px solid #d9d7d0;border-radius:3px;font-weight:{{ s.weight }};">{{ s.label }}</span>
+                      </sc-for>
+                    </div>
+                  </td>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#555;word-break:break-all;">{{ r.unit }}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid #ecebe7;"><button onClick="{{ r.go }}" style="font:inherit;font-size:13px;border:1px solid #1a1a1a;background:#fff;padding:5px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;">查看</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isPreview }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;min-height:0;">
+      <div ref="{{ stageRef }}" style="position:relative;overflow:hidden;display:flex;justify-content:center;padding:20px 0 0;">
+        <div style="width:{{ frameBoxW }};height:{{ frameBoxH }};overflow:hidden;background:#fff;box-shadow:0 1px 0 #d0cec7,0 10px 30px rgba(0,0,0,.08);border-radius:{{ frameRadius }};">
+          <iframe ref="{{ frameRef }}" src="{{ frameSrc }}" onLoad="{{ onFrameLoad }}" title="頁面預覽" style="border:0;display:block;width:{{ frameW }};height:{{ frameH }};transform:scale({{ scale }});transform-origin:0 0;"></iframe>
+        </div>
+      </div>
+      <aside style="background:#fff;border-left:1px solid #d9d7d0;overflow:auto;padding:22px 20px 40px;display:flex;flex-direction:column;gap:18px;">
+        <div>
+          <div style="font-size:12px;color:#777;">{{ deviceLabel }} · {{ deviceWidth }}px</div>
+          <h2 style="margin:4px 0 0;font-size:20px;">{{ pageLabel }}</h2>
+        </div>
+        <sc-for list="{{ slots }}" as="s" hint-placeholder-count="2">
+          <section onClick="{{ s.select }}" style="border:1px solid {{ s.border }};padding:14px;display:flex;flex-direction:column;gap:12px;cursor:pointer;">
+            <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;">
+              <div style="font-weight:700;font-size:15px;">{{ s.name }}</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#777;">{{ s.slot }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:12px;color:#777;">尺寸</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <sc-for list="{{ s.sizeOpts }}" as="o" hint-placeholder-count="3">
+                  <button onClick="{{ o.onClick }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:4px 8px;border:1px solid {{ o.border }};background:{{ o.bg }};color:{{ o.fg }};border-radius:3px;cursor:pointer;">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:12px;color:#777;">客戶素材 · {{ s.size }}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button onClick="{{ s.upload }}" style="font:inherit;font-size:13px;padding:6px 12px;border:0;background:#1a1a1a;color:#fff;border-radius:3px;cursor:pointer;">上傳圖片</button>
+                <sc-if value="{{ s.hasCreative }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ s.clear }}" style="font:inherit;font-size:13px;padding:6px 12px;border:1px solid #d9d7d0;background:#fff;color:#1a1a1a;border-radius:3px;cursor:pointer;">移除</button>
+                </sc-if>
+              </div>
+              <div style="font-size:12px;color:#999;">也可直接把圖片拖到預覽中的版位上。</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#999;word-break:break-all;">{{ s.unit }}</div>
+          </section>
+        </sc-for>
+        <sc-if value="{{ noSlots }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:14px;color:#777;">載入版位資料中…</div>
+        </sc-if>
+      </aside>
+    </div>
+  </sc-if>
+  <input ref="{{ fileRef }}" type="file" accept="image/*" onChange="{{ onFile }}" style="display:none;">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultDevice&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;'desktop'|'mobile'&quot;},&quot;highlightColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#b5121b&quot;,&quot;#1a1a1a&quot;,&quot;#0a6cff&quot;,&quot;#e08a00&quot;],&quot;default&quot;:&quot;#b5121b&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PAGES=[
+  {id:'hbr_home.html',label:'首頁'},
+  {id:'hbr_latest.html',label:'最新'},
+  {id:'hbr_article.html',label:'文章頁'},
+  {id:'hbr_magazine.html',label:'雜誌'},
+  {id:'hbr_video-and-podcast.html',label:'影音與 Podcast'},
+  {id:'hbr_podcast.html',label:'Podcast'}
+];
+const SLOT_NAMES={top:'頂部橫幅',menuBelow:'選單下方橫幅',inList:'列表內嵌',trendList:'熱門列表側欄',contentEnd:'文末橫幅',inArticle1:'文章內廣告 1',inArticle2:'文章內廣告 2',inArticle3:'文章內廣告 3'};
+const DEV={desktop:{label:'桌機',w:1440},mobile:{label:'手機',w:390}};
+const LS='hbr-mediakit-v1';
+
+class Component extends DCLogic {
+  constructor(p){
+    super(p);
+    let saved={};try{saved=JSON.parse(localStorage.getItem(LS)||'{}');}catch(e){}
+    this.state={page:saved.page||PAGES[0].id,device:saved.device||this.props.defaultDevice||'desktop',showAds:saved.showAds??true,showLabels:saved.showLabels??true,
+      sizes:saved.sizes||{},creatives:saved.creatives||{},data:null,stageW:1000,stageH:800,selected:null};
+    this.stageRef=React.createRef();this.frameRef=React.createRef();this.fileRef=React.createRef();
+  }
+  componentDidMount(){
+    fetch('hbr/hbr_assets/ad-slots.json').then(r=>r.json()).then(data=>this.setState({data},()=>this.apply()));
+    this.ro=new ResizeObserver(()=>this.measure());this.observe();
+  }
+  componentWillUnmount(){this.ro&&this.ro.disconnect();}
+  observe(){const el=this.stageRef.current;if(el&&el!==this._obs){this.ro.disconnect();this.ro.observe(el);this._obs=el;this.measure();}}
+  measure(){const el=this.stageRef.current;if(!el)return;const r=el.getBoundingClientRect();if(Math.abs(r.width-this.state.stageW)>1||Math.abs(r.height-this.state.stageH)>1)this.setState({stageW:r.width,stageH:r.height});}
+  componentDidUpdate(){
+    this.observe();this.apply();
+    const {page,device,showAds,showLabels,sizes,creatives}=this.state;
+    const s=JSON.stringify({page,device,showAds,showLabels,sizes,creatives});
+    if(s!==this._last){this._last=s;try{localStorage.setItem(LS,s);}catch(e){try{localStorage.setItem(LS,JSON.stringify({page,device,showAds,showLabels,sizes}));}catch(_){}}}
+  }
+  slotList(){const d=this.state.data;return d&&d[this.state.page]?d[this.state.page][this.state.device]||[]:[];}
+  key(slot){return this.state.page+'|'+this.state.device+'|'+slot;}
+  curSize(s){const v=this.state.sizes[this.key(s.slot)];return v&&(!s.sizes||s.sizes.includes(v))?v:(s.w+'x'+s.h);}
+  setSize(slot,size){this.setState(st=>({sizes:{...st.sizes,[this.key(slot)]:size},selected:slot}));}
+  setCreative(slot,size,url){this.setState(st=>{const c={...st.creatives};const k=this.key(slot)+'|'+size;if(url)c[k]=url;else delete c[k];return {creatives:c,selected:slot};});}
+  readFile(file,slot,size){if(!file||!file.type.startsWith('image/'))return;const fr=new FileReader();fr.onload=()=>this.setCreative(slot,size,fr.result);fr.readAsDataURL(file);}
+  apply(){
+    const f=this.frameRef.current;let doc;try{doc=f&&f.contentDocument;}catch(e){return;}
+    if(!doc||!doc.body)return;
+    const accent=this.props.highlightColor||'#b5121b';
+    const list=this.slotList();
+    const win=f.contentWindow;
+    try{this.artInsert(doc,accent);}catch(e){console.warn(e);}
+    const grid=doc.querySelector('.index-popular-article');const block=grid&&grid.querySelector('.ad-block[data-snap-variant="desktop"]');
+    const wantWide=this.wantWide();
+    let snap=null;
+    if(block&&doc.__layWide!=null&&doc.__layWide!==wantWide&&this.state.showAds&&doc.__layShowAds)snap=this.snapLayout(doc,win,grid,block);
+    doc.__layShowAds=this.state.showAds;
+    // ad blockers inject cosmetic-filter <style> tags (e.g. Stands: id="stndz-*"); disable them in the snapshot
+    const kill=()=>doc.querySelectorAll('style[id],link[id]').forEach(s=>{if(/^(stndz|adblock|abp|adguard|ublock|ghostery)/i.test(s.id)&&!s.disabled){s.disabled=true;s.media='not all';}});
+    kill();
+    if(!doc.__mkObs){doc.__mkObs=new win.MutationObserver(()=>{kill();this._reapply||(this._reapply=setTimeout(()=>{this._reapply=null;win.dispatchEvent(new win.Event('resize'));},50));});doc.__mkObs.observe(doc.documentElement,{childList:true,subtree:true});}
+    doc.querySelectorAll('.ad-placeholder').forEach(p=>{
+      const variant=(p.closest('[data-snap-variant]')||{}).dataset?.snapVariant;
+      if(variant&&variant!==this.state.device)return;
+      // defeat ad-blocker cosmetic filters (inline !important beats stylesheet !important)
+      const wrap=p.closest('.gpt-ad-slot')||p;
+      if(!this.state.showAds){wrap.style.setProperty('display','none','important');return;}
+      wrap.style.removeProperty('display');
+      p.style.setProperty('display','flex','important');p.style.setProperty('visibility','visible','important');p.style.setProperty('opacity','1','important');
+      for(let el=p.parentElement;el&&el!==doc.body;el=el.parentElement){
+        if(el.__forced||win.getComputedStyle(el).display==='none'){
+          el.__forced=true;
+          el.style.setProperty('display',el.classList.contains('flex')?'flex':'block','important');
+          el.style.setProperty('visibility','visible','important');
+        }
+      }
+      const slot=p.dataset.adSlot;const spec=list.find(s=>s.slot===slot)||{slot,w:parseInt(p.style.width),h:parseInt(p.style.height),sizes:(p.dataset.adSizes||'').split(',')};
+      const size=this.curSize(spec);const [w,h]=size.split('x').map(Number);
+      const img=this.state.creatives[this.key(slot)+'|'+size];
+      const sel=this.state.selected===slot;
+      const sig=['stamp1',size,img?img.length+img.slice(-24):'',sel,this.state.showLabels,accent].join('|');
+      if(!p.__mk){
+        p.__mk=true;if(p.__origBg==null)p.__origBg=p.style.background;
+        p.addEventListener('dragover',e=>{e.preventDefault();p.style.outline='3px solid '+accent;});
+        p.addEventListener('dragleave',()=>{p.__sig=null;this.apply();});
+        p.addEventListener('drop',e=>{e.preventDefault();p.__sig=null;const s=p.__spec;this.readFile(e.dataTransfer.files[0],s.slot,this.curSize(s));});
+        p.addEventListener('click',()=>this.setState({selected:p.__spec.slot}));
+      }
+      p.__spec=spec;
+      if(p.__sig===sig)return;p.__sig=sig;
+      const prevSize=p.__size;p.__size=size;
+      const T='.8s cubic-bezier(.65,0,.35,1)';
+      p.style.transition=(block&&block.contains(p))||!prevSize||prevSize===size?'none':`width ${T},height ${T},min-width ${T},min-height ${T}`;
+      ['width','height','min-width','min-height'].forEach((k,i)=>p.style.setProperty(k,(i%2?h:w)+'px','important'));
+      p.style.setProperty('position','relative','important');
+      p.style.setProperty('background','#fff','important');
+      p.style.setProperty('border','1px solid '+accent,'important');
+      const row=p.closest('.ad-wrapper')||p.closest('.ad-top-container');
+      if(row){row.style.setProperty('background','#f2f2f2','important');row.style.setProperty('box-shadow','inset 0 0 10px 5px #ddd','important');}
+      Object.assign(p.style,{cursor:'pointer',outline:sel?'2px solid '+accent:'none',outlineOffset:'2px',padding:'0',overflow:'hidden'});
+      const name=SLOT_NAMES[slot]||slot;
+      const badge=this.state.showLabels?`<div style="position:absolute;left:0;top:0;background:${accent};color:#fff;font:500 11px/1 'Noto Sans TC',sans-serif;padding:4px 6px;white-space:nowrap;z-index:2">${name} · ${w}×${h}</div>`:'';
+      const stamp=(((h===250&&(w===970||w===300))||(w===640&&h===1386))&&!img)?`<div style="position:absolute;right:28px;top:50%;transform:translateY(-50%) rotate(-14deg);width:92px;height:92px;border:4px solid ${accent};border-radius:50%;display:flex;align-items:center;justify-content:center;color:${accent};opacity:.85;pointer-events:none;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px ${accent};"><span style="font:700 40px/1 'Noto Serif TC','Noto Sans TC',serif;letter-spacing:0">新</span></div>`:'';
+      p.innerHTML=img
+        ?`<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">${badge}`
+        :`${stamp}${this.state.showLabels?`<div style="font:500 ${h<60?12:14}px/1.3 'Noto Sans TC',sans-serif;color:#555">${name}</div>`:''}<div style="font:500 ${h<60?11:13}px/1.2 'IBM Plex Mono',monospace;color:#777">${w} × ${h}</div>${h>=90&&this.state.showLabels?`<div style="font:400 11px/1.2 'Noto Sans TC',sans-serif;color:#999">拖放素材至此</div>`:''}`;
+    });
+    try{this.layoutFix(doc,win,accent,snap,wantWide,grid,block);}catch(e){console.warn(e);}
+    try{this.topFix(doc,win,accent);}catch(e){console.warn(e);}
+    try{this.vidFix(doc,win,accent);}catch(e){console.warn(e);}
+    try{this.artScale(doc,accent);}catch(e){console.warn(e);}
+    // the snapshot's header script positions the fixed nav from the top ad's height; re-sync it through size transitions
+    cancelAnimationFrame(this._navRaf);const t0=performance.now();
+    const tick=()=>{try{win.dispatchEvent(new win.Event('resize'));}catch(e){return;}if(performance.now()-t0<1000)this._navRaf=requestAnimationFrame(tick);};
+    tick();
+  }
+  topFix(doc,win,accent){
+    // site CSS pins .nav-outside to a fixed height (280px @≥1024) sized for a 90px-tall ad; grow it by the extra ad height
+    const no=doc.querySelector('.nav-outside');if(!no||doc.readyState!=='complete')return;
+    const desktop=this.state.device==='desktop';
+    const ph=[...no.querySelectorAll('.ad-placeholder[data-ad-slot="top"]')].find(p=>p.getClientRects().length);
+    const spec=this.slotList().find(s=>s.slot==='top');
+    if(!ph||!spec){if(no.__topKey!=='none'){no.__topKey='none';no.style.removeProperty('height');no.querySelectorAll('.mk-top-anno').forEach(e=>e.remove());}return;}
+    const phH=this.state.showAds?Number(this.curSize(spec).split('x')[1]):90;
+    // site CSS reserves room for ad ≤90px tall on desktop (280px), ≤56px on mobile (146px = 16+56+16 + 58 nav)
+    const delta=Math.max(0,phH-(desktop?90:56));
+    const sizeLabel=spec?this.curSize(spec).replace('x','×'):'';
+    const key=delta+'|'+this.state.showLabels+'|'+accent;
+    if(no.__topKey===key)return;
+    const first=no.__topKey==null;no.__topKey=key;
+    const H0=win.innerWidth>=1024?280:146,H=H0+delta;
+    const E='cubic-bezier(.65,0,.35,1)';
+    no.style.transition=first?'none':`height .8s ${E}`;
+    if(delta)no.style.setProperty('height',H+'px','important');else no.style.removeProperty('height');
+    if(win.getComputedStyle(no).position==='static')no.style.position='relative';
+    no.querySelectorAll('.mk-top-anno').forEach(e=>e.remove());
+    if(delta&&this.state.showLabels){
+      const a=doc.createElement('div');a.className='mk-top-anno';
+      a.style.cssText=`position:absolute;left:0;right:0;top:${H}px;height:0;border-top:2px dashed ${accent};z-index:12;pointer-events:none;`;
+      a.innerHTML=`<div style="position:absolute;right:${desktop?24:12}px;top:8px;background:${accent};color:#fff;font:500 12px/1.4 'Noto Sans TC',sans-serif;padding:4px 9px;white-space:nowrap;">頂部區塊高度 ${H0}→${H}px（+${delta}px），內容下移 ${delta}px</div>`+
+        `<div style="position:absolute;right:${desktop?24:12}px;top:36px;max-width:${desktop?280:260}px;background:#fff;border:1px solid ${accent};color:#1a1a1a;font:400 12px/1.5 'Noto Sans TC',sans-serif;padding:6px 9px;">原 CSS 將 .nav-outside 固定為 ${H0}px，${sizeLabel} 會讓導覽列蓋住內容；改為依廣告實際高度計算。</div>`;
+      no.appendChild(a);
+      if(!first)a.animate([{opacity:0},{opacity:1}],{duration:800,easing:E});
+    }
+  }
+  vidFix(doc,win,accent){
+    if(this.state.page!=='hbr_video-and-podcast.html'||doc.readyState!=='complete')return;
+    const list=doc.querySelector('.popular-video .video-list');if(!list)return;
+    const wrap=list.__adWrap=list.__adWrap||list.querySelector(':scope > .ad-wrapper');if(!wrap)return;
+    const ph=[...wrap.querySelectorAll('.ad-placeholder[data-ad-slot="trendList"]')].find(p=>p.getClientRects().length);
+    const spec=this.slotList().find(s=>s.slot==='trendList');
+    const wide=this.state.device==='desktop'&&this.state.showAds&&!!ph&&!!spec&&this.curSize(spec)==='970x250';
+    const key=wide+'|'+this.state.showLabels+'|'+accent;
+    if(list.__vidKey===key)return;
+    const first=list.__vidKey==null;const changed=!first&&list.__vidWide!==wide;
+    list.__vidKey=key;list.__vidWide=wide;
+    const D=900,E='cubic-bezier(.65,0,.35,1)';
+    const items=()=>[...list.children,wrap].filter(c=>!c.classList.contains('mk-fake-video'));
+    const before=changed?new Map(items().map(el=>[el,el.getBoundingClientRect()])):null;
+    list.querySelectorAll('.mk-fake-video').forEach(e=>e.remove());
+    wrap.querySelectorAll('.mk-vid-anno').forEach(e=>e.remove());
+    if(!wrap.__home)wrap.__home={parent:list,next:wrap.nextSibling};
+    const body=list.closest('.page-content-body');
+    if(wide){
+      // move below the "更多" link as a full-width row of the page grid (left column is too narrow for 970)
+      if(body&&wrap.parentElement!==body)body.appendChild(wrap);
+      wrap.style.setProperty('grid-column','1 / -1','important');
+      wrap.style.position='relative';wrap.style.display='flex';wrap.style.justifyContent='center';wrap.style.marginTop='8px';
+      if(ph){ph.style.removeProperty('transform');ph.style.removeProperty('transform-origin');}
+      const vids=list.querySelectorAll(':scope > .video-item');const n=vids.length;const fill=(3-n%3)%3;const src=vids[n-1];
+      const fakes=[];
+      for(let i=0;i<fill&&src;i++){
+        const f=src.cloneNode(true);f.classList.add('mk-fake-video');f.style.position='relative';f.style.outline=`2px dashed ${accent}`;f.style.outlineOffset='4px';
+        const im=f.querySelector('.image img');if(im){const d=doc.createElement('div');d.style.cssText="position:absolute;inset:0;background:#e6e6e6;display:flex;align-items:center;justify-content:center;font:12px 'Noto Sans TC',sans-serif;color:#888";d.textContent='影片縮圖';im.replaceWith(d);}
+        const cap=f.querySelector('.caption a')||f.querySelector('.caption');if(cap)cap.textContent='（假資料）影片標題將由 API 回傳，最多顯示兩行';
+        const dt=f.querySelector('.date');if(dt)dt.textContent='YYYY/MM/DD';
+        f.querySelectorAll('a').forEach(a=>a.removeAttribute('href'));
+        const note=doc.createElement('div');note.style.cssText=`position:absolute;right:0;top:8px;background:${accent};color:#fff;font:500 12px/1.4 'Noto Sans TC',sans-serif;padding:4px 8px;z-index:3;pointer-events:none;`;note.textContent='假資料 · 需後端 API 補上影片';f.appendChild(note);
+        list.appendChild(f);fakes.push(f);
+      }
+      if(this.state.showLabels){
+        const a=doc.createElement('div');a.className='mk-vid-anno';
+        a.style.cssText=`position:absolute;left:0;top:-30px;background:${accent};color:#fff;font:500 12px/1.4 'Noto Sans TC',sans-serif;padding:4px 9px;white-space:nowrap;z-index:4;pointer-events:none;`;
+        a.style.left='50%';a.style.transform='translateX(-485px)';
+        a.textContent='970×250 版面調整：廣告移至「更多」下方整列；原格位由影片補上';
+        wrap.appendChild(a);
+        if(changed)a.animate([{opacity:0},{opacity:1}],{duration:D,easing:E});
+      }
+      if(changed)fakes.forEach(f=>f.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:D,easing:E}));
+    }else{
+      wrap.style.removeProperty('grid-column');['position','height','overflow','display','justifyContent','marginTop'].forEach(k=>wrap.style[k]='');
+      const h=wrap.__home;if(wrap.parentElement!==h.parent)h.parent.insertBefore(wrap,h.next&&h.next.parentNode===h.parent?h.next:null);
+    }
+    if(changed){
+      items().forEach(el=>{const a=before.get(el);if(!a)return;const b=el.getBoundingClientRect();const dx=a.left-b.left,dy=a.top-b.top;
+        if(Math.abs(dx)>1||Math.abs(dy)>1)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:D,easing:E});});
+      let el=list.closest('.popular-video');if(el){const s=el.nextElementSibling;}
+    }
+  }
+  // 文章內廣告：逐節點(引言/P/H2/H3)累計中文字數，達門檻後於該 P 結尾插入，歸零重算；依序輪播，最多 N 則
+  artInsert(doc,accent){
+    if(this.state.page!=='hbr_article.html'||doc.__artDone)return;
+    const root=doc.querySelector('#article-content-wrapper');if(!root)return;
+    const holder=root.querySelector(':scope > div')||root;
+    const nodes=[...holder.children].filter(e=>/^(P|H2|H3|H4|BLOCKQUOTE|UL|OL)$/.test(e.tagName));
+    if(!nodes.length)return;
+    doc.__artDone=true;
+    const desc=doc.querySelector('.article-description');
+    const zh=s=>(s.match(/[\u3400-\u9fff]/g)||[]).length;
+    const TH=250,SEQ=[{slot:'inArticle1',w:300,h:250},this.state.device==='desktop'?{slot:'inArticle2',w:300,h:250}:{slot:'inArticle2',w:640,h:1386},{slot:'inArticle3',w:300,h:250}];
+    let acc=desc?zh(desc.textContent):0,cnt=desc?1:0,k=0;
+    nodes.forEach((n,i)=>{
+      if(k>=SEQ.length)return;
+      acc+=zh(n.textContent);cnt++;
+      if(acc>=TH&&n.tagName==='P'){
+        const s=SEQ[k++];
+        const wrap=doc.createElement('div');wrap.className='mk-inart';
+        wrap.style.cssText='margin:24px 0;display:flex;flex-direction:column;align-items:center;gap:8px;';
+        wrap.dataset.info=`廣告 #${k} · ${s.slot} · 節點 i=${i} · 距上次廣告 ${cnt} 段 / ${acc} 中文字`;
+        const box=doc.createElement('div');box.className='mk-inart-box';box.style.cssText='position:relative;width:100%;display:flex;justify-content:center;overflow:visible;';
+        const ph=doc.createElement('div');ph.className='ad-placeholder';ph.dataset.adSlot=s.slot;ph.dataset.adSizes=s.w+'x'+s.h;
+        ph.style.cssText=`display:flex;width:${s.w}px;height:${s.h}px;box-sizing:border-box;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px dashed rgb(181,181,181);background:repeating-linear-gradient(45deg,#f4f4f4 0 10px,#ececec 10px 20px);color:#888;font:12px/1.2 Arial,sans-serif;text-align:center;flex-shrink:0;`;
+        box.appendChild(ph);wrap.appendChild(box);n.after(wrap);
+        acc=0;cnt=0;
+      }
+    });
+  }
+  artScale(doc,accent){
+    if(this.state.page!=='hbr_article.html')return;
+    doc.querySelectorAll('.mk-inart').forEach(wrap=>{
+      wrap.style.display=this.state.showAds?'flex':'none';
+      const box=wrap.querySelector('.mk-inart-box'),ph=box.querySelector('.ad-placeholder');
+      const [w,h]=[parseFloat(ph.style.width),parseFloat(ph.style.height)];
+      const win=doc.defaultView;
+      const inter=w===640&&h===1386;
+      let k;
+      if(inter){
+        // Interscroller：廣告固定於視窗後方，box 為一個視窗高的開口，文章上下捲動時覆蓋/揭露廣告
+        const cw=doc.documentElement.clientWidth;
+        k=Math.min(1,cw/w);
+        const nav=doc.querySelector('.nav-container');const navH=nav?Math.round(nav.getBoundingClientRect().height):0;
+        box.style.height=Math.max(200,win.innerHeight-navH)+'px';
+        box.style.clipPath='inset(0)';box.style.width=cw+'px';box.style.setProperty('max-width','none','important');box.style.setProperty('min-width',cw+'px','important');box.style.alignSelf='flex-start';box.style.flexShrink='0';
+        box.style.marginLeft='0px';
+        const r=box.getBoundingClientRect();box.style.marginLeft=(-r.left)+'px';
+        box.style.background='#111';
+        ph.style.setProperty('position','fixed','important');
+        ph.style.setProperty('top',navH+'px','important');ph.style.setProperty('left',(cw/2)+'px','important');
+        ph.style.setProperty('transform',`translateX(-50%) scale(${k})`,'important');ph.style.setProperty('transform-origin','top center','important');
+        ph.style.setProperty('z-index','0','important');
+      }else{
+        k=Math.min(1,box.clientWidth/w);
+        ph.style.setProperty('transform',k<1?`scale(${k})`:'none','important');ph.style.setProperty('transform-origin','top center','important');
+        box.style.height=Math.round(h*k)+'px';
+      }
+      let lab=wrap.querySelector('.mk-inart-lab');
+      if(this.state.showLabels){
+        if(!lab){lab=doc.createElement('div');lab.className='mk-inart-lab';wrap.insertBefore(lab,box);}
+        lab.style.cssText=`align-self:stretch;background:#fff;border:1px dashed ${accent};color:#1a1a1a;font:500 12px/1.5 'Noto Sans TC',sans-serif;padding:6px 10px;`;
+        lab.textContent=wrap.dataset.info+(inter?` · 滑動揭露（Interscroller）：廣告固定於視窗後方，文章捲動時覆蓋／露出；素材依螢幕寬縮放 ${Math.round(k*100)}%`:(k<1?` · 欄寬 ${Math.round(box.clientWidth)}px，預覽縮放 ${Math.round(k*100)}%`:''));
+      }else if(lab)lab.remove();
+    });
+  }
+  wantWide(){const spec=this.slotList().find(s=>s.slot==='menuBelow');return this.state.page==='hbr_home.html'&&this.state.device==='desktop'&&this.state.showAds&&!!spec&&this.curSize(spec)==='970x250';}
+  rect(el,win){if(!el)return null;const r=el.getBoundingClientRect();return {x:r.left+win.scrollX,y:r.top+win.scrollY,w:r.width,h:r.height};}
+  snapLayout(doc,win,grid,block){
+    const topic=grid.querySelector('.popular-topic');
+    return {block:this.rect(block,win),ph:this.rect(block.querySelector('.ad-placeholder'),win),junior:this.rect(doc.querySelector('section.event-top.junior'),win),
+      loadMore:this.rect(grid.querySelector('.popular-newest-article-list .load-more'),win),tc:this.rect(topic&&topic.querySelector('.popular-topic-container'),win)};
+  }
+  setWide(doc,win,grid,block,wide,accent){
+    if(!block.__home)block.__home={parent:block.parentElement,next:block.nextSibling};
+    const topic=grid.querySelector('.popular-topic');
+    const loadMore=grid.querySelector('.popular-newest-article-list .load-more');
+    const list=grid.querySelector('.popular-newest-article-list .list');
+    if(wide){
+      const pl=parseFloat(win.getComputedStyle(grid).paddingLeft)||0;
+      grid.style.setProperty('grid-template-areas','"newest popular" "newest topic" "ad ad"','important');
+      if(block.parentElement!==grid)grid.appendChild(block);
+      Object.assign(block.style,{gridArea:'ad',marginLeft:(-pl)+'px',marginRight:'0',position:'relative'});
+      block.style.setProperty('padding','0','important');
+      if(loadMore){loadMore.style.setProperty('margin-top','40px','important');loadMore.style.setProperty('margin-bottom','48px','important');}
+      if(topic){
+        topic.style.setProperty('display','flex','important');topic.style.setProperty('flex-direction','column','important');
+        const out=topic.querySelector('.popular-article-outside');const tc=topic.querySelector('.popular-topic-container');
+        if(out){out.style.setProperty('flex','1','important');out.style.setProperty('display','flex','important');out.style.setProperty('flex-direction','column','important');}
+        if(tc){tc.style.setProperty('flex','1','important');tc.style.position='relative';}
+      }
+      if(list&&!list.querySelector('.mk-fake-article')){
+        const items=list.querySelectorAll('.list-content-item');const src=items[items.length-1];
+        if(src){
+          const fake=src.cloneNode(true);fake.classList.add('mk-fake-article');fake.style.position='relative';
+          const cap=fake.querySelector('.caption a')||fake.querySelector('.caption');if(cap)cap.textContent='（假資料）文章標題將由 API 回傳，最多顯示兩行';
+          const ct=fake.querySelector('.content');if(ct)ct.textContent='（假資料）文章摘要將由 API 回傳。此篇用於 970×250 版面調整後，補足左欄最新文章列表的高度。';
+          const dt=fake.querySelector('.date');if(dt)dt.textContent='YYYY/MM/DD';
+          fake.querySelectorAll('.category a, .author a, .info a').forEach(a=>a.textContent='分類 / 作者');
+          fake.querySelectorAll('a').forEach(a=>a.removeAttribute('href'));
+          fake.querySelectorAll('img').forEach(im=>{if(/bookmark|share/i.test(im.src))return;const d=doc.createElement('div');d.style.cssText=`width:${im.offsetWidth||im.width||240}px;height:${im.offsetHeight||im.height||160}px;max-width:100%;background:#e6e6e6;display:flex;align-items:center;justify-content:center;font:12px 'Noto Sans TC',sans-serif;color:#888`;d.textContent='文章圖片';im.replaceWith(d);});
+          const note=doc.createElement('div');note.className='mk-api-note';fake.appendChild(note);
+          list.appendChild(fake);
+        }
+      }
+      const fakeEl=list&&list.querySelector('.mk-fake-article');
+      if(fakeEl){
+        fakeEl.style.outline=`2px dashed ${accent}`;fakeEl.style.outlineOffset='-2px';
+        const note=fakeEl.querySelector('.mk-api-note');
+        note.style.cssText=`position:absolute;right:0;top:12px;background:${accent};color:#fff;font:500 12px/1.4 'Noto Sans TC',sans-serif;padding:5px 9px;z-index:3;pointer-events:none;`;
+        note.textContent='假資料 · 需後端 API 補上文章';
+      }
+    }else{
+      grid.querySelectorAll('.mk-fake-article').forEach(e=>e.remove());
+      const h=block.__home;
+      if(block.parentElement!==h.parent)h.parent.insertBefore(block,h.next&&h.next.parentNode===h.parent?h.next:null);
+      grid.style.removeProperty('grid-template-areas');
+      ['gridArea','marginLeft','marginRight','position'].forEach(k=>block.style[k]='');
+      block.style.removeProperty('padding');
+      if(loadMore){loadMore.style.removeProperty('margin-top');loadMore.style.removeProperty('margin-bottom');}
+      if(topic){['display','flex-direction'].forEach(k=>topic.style.removeProperty(k));
+        topic.querySelectorAll('.popular-article-outside,.popular-topic-container').forEach(e=>['flex','display','flex-direction'].forEach(k=>e.style.removeProperty(k)));}
+    }
+  }
+  measureNarrow(doc,win,grid,block,accent){
+    // baseline = 970×250 left in the left column (the unadjusted layout that caused the gap)
+    const ph=block.querySelector('.ad-placeholder');const tr=ph.style.transition;ph.style.transition='none';
+    this.setWide(doc,win,grid,block,false,accent);
+    const s=this.snapLayout(doc,win,grid,block);
+    this.setWide(doc,win,grid,block,true,accent);ph.style.transition=tr;
+    return s;
+  }
+  layoutFix(doc,win,accent,snap,wide,grid,block){
+    if(!block)return;
+    const key=wide+'|'+this.state.showLabels+'|'+accent;
+    if(doc.__layKey===key&&!snap)return;
+    doc.__layKey=key;doc.__layWide=wide;
+    doc.querySelectorAll('.mk-anno').forEach(e=>e.remove());
+    this.setWide(doc,win,grid,block,wide,accent);
+    const junior=doc.querySelector('section.event-top.junior');
+    doc.__juniorY=junior?this.rect(junior,win).y:null;
+    const tc=grid.querySelector('.popular-topic .popular-topic-container');
+    const annos=[];
+    if(wide&&this.state.showLabels){
+      const base=this.measureNarrow(doc,win,grid,block,accent);
+      const now=this.snapLayout(doc,win,grid,block);
+      const mk=(parent,css,html)=>{const d=doc.createElement('div');d.className='mk-anno';d.style.cssText='pointer-events:none;z-index:4;'+css;d.innerHTML=html;parent.appendChild(d);annos.push(d);return d;};
+      const pill=`background:${accent};color:#fff;font:500 12px/1.4 'Noto Sans TC',sans-serif;padding:4px 9px;white-space:nowrap;`;
+      mk(block,`position:absolute;left:24px;top:50%;transform:translateY(-50%);max-width:200px;background:#fff;border:1px solid ${accent};color:#1a1a1a;font:400 12px/1.5 'Noto Sans TC',sans-serif;padding:8px 10px;`,
+        `<div style="font-weight:700;color:${accent};margin-bottom:2px">970×250 版面調整</div>廣告移出左欄、改為全寬列；「熱門主題」底色延伸貼齊廣告列，不留空白。`);
+      if(tc&&base.tc){const ext=Math.round(now.tc.h-base.tc.h);
+        if(ext>1)mk(tc,`position:absolute;left:0;right:0;bottom:0;height:${ext}px;border:2px dashed ${accent};background:repeating-linear-gradient(45deg,${accent}14 0 8px,transparent 8px 16px);display:flex;align-items:center;justify-content:center;box-sizing:border-box;`,
+          `<div style="position:absolute;left:12px;top:0;bottom:0;width:2px;background:${accent}"></div><div style="position:absolute;left:6px;top:0;width:14px;height:2px;background:${accent}"></div><div style="position:absolute;left:6px;bottom:0;width:14px;height:2px;background:${accent}"></div><div style="${pill}">熱門主題底色延伸 +${ext}px</div>`);}
+      if(junior&&base.junior){const dy=Math.round(now.junior.y-base.junior.y);
+        if(win.getComputedStyle(junior).position==='static')junior.style.position='relative';
+        if(Math.abs(dy)>1)mk(junior,`position:absolute;left:0;right:0;top:0;height:0;border-top:2px dashed ${accent};`,
+          `<div style="position:absolute;right:24px;top:8px;${pill}">新手進修 ${dy<0?'上移':'下移'} ${Math.abs(dy)}px</div>`);}
+    }
+    if(!snap)return;
+    const D=900,E='cubic-bezier(.65,0,.35,1)';
+    const now=this.snapLayout(doc,win,grid,block);
+    const ph=block.querySelector('.ad-placeholder');
+    if(snap.block&&now.block&&ph){
+      const pos=r=>({left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px'});
+      const outer=doc.createElement('div');outer.style.cssText='position:absolute;z-index:50;pointer-events:none;background:#f2f2f2;box-shadow:inset 0 0 10px 5px #ddd;';
+      const inner=doc.createElement('div');inner.style.cssText=`position:absolute;z-index:51;pointer-events:none;background:#fff;border:1px solid ${accent};box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;`;
+      inner.innerHTML=ph.innerHTML;
+      Object.assign(outer.style,pos(now.block));Object.assign(inner.style,pos(now.ph));
+      doc.body.appendChild(outer);doc.body.appendChild(inner);
+      block.style.opacity='0';
+      outer.animate([pos(snap.block),pos(now.block)],{duration:D,easing:E});
+      const an=inner.animate([pos(snap.ph),pos(now.ph)],{duration:D,easing:E});
+      an.onfinish=()=>{block.style.opacity='';outer.remove();inner.remove();};
+    }
+    if(snap.junior&&now.junior){const dy=snap.junior.y-now.junior.y;
+      if(Math.abs(dy)>1){const els=[];for(let el=grid;el&&el!==doc.body;el=el.parentElement){for(let s=el.nextElementSibling;s;s=s.nextElementSibling){const p=win.getComputedStyle(s).position;if(p!=='fixed'&&p!=='sticky')els.push(s);}}
+        els.forEach(el=>el.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:D,easing:E}));}}
+    const lm=grid.querySelector('.popular-newest-article-list .load-more');
+    if(lm&&snap.loadMore&&now.loadMore){const dy=snap.loadMore.y-now.loadMore.y;if(Math.abs(dy)>1)lm.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:D,easing:E});}
+    if(tc&&snap.tc&&now.tc){const diff=now.tc.h-snap.tc.h;
+      if(diff>1)tc.animate([{clipPath:`inset(0 0 ${diff}px 0)`},{clipPath:'inset(0 0 0 0)'}],{duration:D,easing:E});
+      else if(diff<-1){const band=doc.createElement('div');band.style.cssText=`position:absolute;z-index:40;pointer-events:none;background:${win.getComputedStyle(tc).backgroundColor};left:${now.tc.x}px;top:${now.tc.y+now.tc.h}px;width:${now.tc.w}px;height:${-diff}px;transform-origin:top;`;doc.body.appendChild(band);
+        band.animate([{transform:'scaleY(1)'},{transform:'scaleY(0)'}],{duration:D,easing:E}).onfinish=()=>band.remove();}}
+    const fk=wide&&grid.querySelector('.mk-fake-article');
+    if(fk)fk.animate([{opacity:0},{opacity:1}],{duration:D,easing:E});
+    annos.forEach(a=>a.animate([{opacity:0},{opacity:1}],{duration:D,easing:E}));
+  }
+  scrollTo(slot){
+    const f=this.frameRef.current;const doc=f&&f.contentDocument;if(!doc)return;
+    if(slot==='menuBelow'&&this.state.page==='hbr_home.html'&&this.state.device==='desktop'&&doc.__juniorY!=null){
+      const w=f.contentWindow;w.scrollTo({top:Math.max(0,doc.__juniorY-(w.innerHeight-134)),behavior:'smooth'});return;
+    }
+    let el=[...doc.querySelectorAll('.ad-placeholder[data-ad-slot="'+slot+'"]')].find(p=>p.getClientRects().length);
+    if(el&&el.closest('.mk-inart'))el=el.closest('.mk-inart');
+    if(el){const r=el.getBoundingClientRect();f.contentWindow.scrollTo({top:Math.max(0,r.top+f.contentWindow.scrollY-140),behavior:'smooth'});}
+  }
+  renderVals(){
+    const st=this.state;const isSpec=st.page==='spec';
+    const dev=DEV[st.device];const ink='#1a1a1a';
+    const tabs=[...PAGES,{id:'spec',label:'規格總表'}].map(p=>({label:p.label,bg:st.page===p.id?'#fff':'transparent',fg:st.page===p.id?ink:'#d6d6d6',onClick:()=>this.setState({page:p.id,selected:null})}));
+    const devices=Object.entries(DEV).map(([k,v])=>({label:v.label,bg:st.device===k?'#fff':'transparent',fg:st.device===k?ink:'#d6d6d6',onClick:()=>this.setState({device:k,selected:null})}));
+    const availW=st.stageW-(st.device==='mobile'?0:40);
+    const scale=Math.min(1,availW/dev.w);
+    const boxH=st.stageH-20;
+    const accent=this.props.highlightColor||'#b5121b';
+    const slots=this.slotList().map(s=>{
+      const size=this.curSize(s);const sel=st.selected===s.slot;
+      return {name:SLOT_NAMES[s.slot]||s.slot,slot:s.slot,unit:s.unit,size:size.replace('x','×'),border:sel?accent:'#d9d7d0',
+        hasCreative:!!st.creatives[this.key(s.slot)+'|'+size],
+        select:()=>{this.setState({selected:s.slot});this.scrollTo(s.slot);},
+        sizeOpts:s.sizes.map(z=>({label:z.replace('x','×'),bg:z===size?ink:'#fff',fg:z===size?'#fff':ink,border:z===size?ink:'#d9d7d0',onClick:e=>{e.stopPropagation();this.setSize(s.slot,z);setTimeout(()=>this.scrollTo(s.slot),50);}})),
+        upload:e=>{e.stopPropagation();this._pending={slot:s.slot,size};this.fileRef.current&&this.fileRef.current.click();},
+        clear:e=>{e.stopPropagation();this.setCreative(s.slot,size,null);}};
+    });
+    const specRows=[];
+    if(st.data)PAGES.forEach(p=>['desktop','mobile'].forEach(d=>(st.data[p.id]?.[d]||[]).forEach(s=>specRows.push({
+      page:p.label,device:DEV[d].label,name:SLOT_NAMES[s.slot]||s.slot,slot:s.slot,unit:s.unit,
+      sizes:s.sizes.map(z=>({label:z.replace('x','×'),weight:z===s.w+'x'+s.h?'700':'400'})),
+      go:()=>this.setState({page:p.id,device:d,selected:s.slot},()=>setTimeout(()=>this.scrollTo(s.slot),600))}))));
+    return {
+      tabs,devices,isSpec,isPreview:!isSpec,specRows,slots,noSlots:!isSpec&&!st.data,
+      showAds:st.showAds,showLabels:st.showLabels,
+      toggleAds:()=>this.setState(s=>({showAds:!s.showAds})),
+      toggleLabels:()=>this.setState(s=>({showLabels:!s.showLabels})),
+      stageRef:this.stageRef,frameRef:this.frameRef,fileRef:this.fileRef,
+      frameSrc:'hbr/'+(isSpec?PAGES[0].id:st.page),
+      frameW:dev.w+'px',frameH:Math.ceil(boxH/scale)+'px',scale:String(scale),
+      frameBoxW:Math.floor(dev.w*scale)+'px',frameBoxH:boxH+'px',frameRadius:st.device==='mobile'?'14px 14px 0 0':'0',
+      deviceLabel:dev.label,deviceWidth:dev.w,pageLabel:(PAGES.find(p=>p.id===st.page)||{}).label,
+      onFrameLoad:()=>{const f=this.frameRef.current;try{f.contentDocument.querySelectorAll('.ad-placeholder').forEach(p=>{p.__mk=false;p.__sig=null;});}catch(e){}this.apply();setTimeout(()=>this.apply(),300);},
+      onFile:e=>{const file=e.target.files[0];const pd=this._pending;e.target.value='';if(pd)this.readFile(file,pd.slot,pd.size);}
+    };
+  }
+}
+</script>
+</body>
+</html>

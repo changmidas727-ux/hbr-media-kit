@@ -1,0 +1,338 @@
+{
+  "hbr_home.html": {
+    "desktop": [
+      {
+        "slot": "top",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 970,
+        "h": 250,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "menuBelow",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "top",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 320,
+        "h": 50,
+        "sizes": [
+          "320x50",
+          "300x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "menuBelow",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 300,
+        "h": 100,
+        "sizes": [
+          "300x100",
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  },
+  "hbr_latest.html": {
+    "desktop": [
+      {
+        "slot": "top",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "inList",
+        "unit": "/31436032/desktop_list/desktop_list",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "top",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 320,
+        "h": 50,
+        "sizes": [
+          "320x50",
+          "300x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "inList",
+        "unit": "/31436032/mobile_list/mobile_list",
+        "w": 300,
+        "h": 100,
+        "sizes": [
+          "300x100",
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  },
+  "hbr_article.html": {
+    "desktop": [
+      {
+        "slot": "menuBelow",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "inArticle1",
+        "unit": "（待後端確認）GPT desktop_inarticle1",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "inArticle2",
+        "unit": "（待後端確認）GPT desktop_inarticle2",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "inArticle3",
+        "unit": "（待後端確認）GPT desktop_inarticle3",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "contentEnd",
+        "unit": "/31436032/desktop_content/desktop_content",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "menuBelow",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 300,
+        "h": 100,
+        "sizes": [
+          "300x100",
+          "300x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "inArticle1",
+        "unit": "（待後端確認）GPT mobile_inarticle1",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "inArticle2",
+        "unit": "（待後端確認）GPT mobile_inarticle2",
+        "w": 640,
+        "h": 1386,
+        "sizes": [
+          "640x1386"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "inArticle3",
+        "unit": "（待後端確認）GPT mobile_inarticle3",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": false
+      },
+      {
+        "slot": "contentEnd",
+        "unit": "/31436032/mobile_content/mobile_content",
+        "w": 300,
+        "h": 100,
+        "sizes": [
+          "300x100",
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  },
+  "hbr_magazine.html": {
+    "desktop": [
+      {
+        "slot": "top",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "top",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 320,
+        "h": 50,
+        "sizes": [
+          "320x50",
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  },
+  "hbr_video-and-podcast.html": {
+    "desktop": [
+      {
+        "slot": "top",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "trendList",
+        "unit": "/31436032/desktop_subIndexVideo/desktop_subIndexVideo",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "top",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 320,
+        "h": 50,
+        "sizes": [
+          "320x50",
+          "300x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "trendList",
+        "unit": "/31436032/mobile_subIndexVideo/mobile_subIndexVideo",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  },
+  "hbr_podcast.html": {
+    "desktop": [
+      {
+        "slot": "top",
+        "unit": "/31436032/desktop_allPage/desktop_allPage",
+        "w": 728,
+        "h": 90,
+        "sizes": [
+          "728x90",
+          "970x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "trendList",
+        "unit": "/31436032/desktop_subIndexVideo/desktop_subIndexVideo",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250",
+          "970x250"
+        ],
+        "filled": true
+      }
+    ],
+    "mobile": [
+      {
+        "slot": "top",
+        "unit": "/31436032/mobile_allPage/mobile_allPage",
+        "w": 320,
+        "h": 50,
+        "sizes": [
+          "320x50",
+          "300x250"
+        ],
+        "filled": true
+      },
+      {
+        "slot": "trendList",
+        "unit": "/31436032/mobile_subIndexVideo/mobile_subIndexVideo",
+        "w": 300,
+        "h": 250,
+        "sizes": [
+          "300x250"
+        ],
+        "filled": true
+      }
+    ]
+  }
+}
